@@ -1,6 +1,6 @@
 Tento repozitář obsahuje
 
-                      - soubor task_manager.py, což je skript na správu úkolů - umožňuje vytvářet, zobrazovat a odstraňovat úkoly.
+                      - soubor main.py, což je skript na správu úkolů - umožňuje vytvářet, zobrazovat a odstraňovat úkoly.
                       
                       - soubor seznam_ukolu.json, obsahuje seznam slovníků názvů a popisů úkolů  
                       
