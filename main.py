@@ -1,3 +1,11 @@
+"""
+main.py: čtvrtý projekt do Engeto Online Python Akademie
+
+author: Jarmila Kroulová
+email: jarmilxxx@seznam.cz
+""" 
+
+
 import json
 import os
 
@@ -35,7 +43,7 @@ def zobrazit_ukol(seznam) -> list[dict]:
         for cislo, ukol in enumerate(seznam, start= 1):
             nazev = ukol["název"]
             popis = ukol["popis"]
-        print(f"{cislo}. {nazev} - {popis}")  
+            print(f"{cislo}. {nazev} - {popis}")  
     except TypeError:
         print("Zkuste to znovu.")  
 
@@ -78,7 +86,7 @@ def nacist_predchozi_ukoly(seznam_json):
 
 def zapsat_do_souboru(seznam, seznam_json):
     try:
-        with open("seznam_ukolu.json", mode="w", encoding="utf-8") as json_seznam:
+        with open(seznam_json, mode="w", encoding="utf-8") as json_seznam:
             json.dump(seznam, json_seznam, ensure_ascii=False)
     except Exception as e:
         print(f"Chyba - {e} při zápisu do souboru.")
