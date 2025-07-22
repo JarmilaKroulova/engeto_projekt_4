@@ -1,0 +1,315 @@
+Testovací plán pro Task manager
+______________________________________
+
+Skript slouží ke správě úkolů, umožňuje vytvářet, zobrazovat a odstraňovat úkoly. 
+Pro lepší správu úkolů jsou úkoly ukládány do json souboru, ze kterého je lze načíst i po ukončení skriptu. 
+
+Cíle testování: Ověření správné funkčnosti programu a jeho funkcí 
+                Ověření ukládání dat do souboru
+                Ověření kontroly neplatných vstupů
+Rozsah testování: Pokrytí všech funkcí - testy pozitivní, negativní, hraniční
+                Netestuje se vizuální stránka programu
+Testovací strategie: Jednotkové manuální testování - testování na základě pokrytí, ad-hoc testování
+Testovací prostředí: Lokální
+
+Tento testovací plán obsahuje testovací případy (TC) pro každou funkci ve skriptu. 
+Funkce jsou - hlavní menu TC01 - TC03
+        - přidat úkol TC04 - TC07 + TC18 - TC20
+        - zobrazit úkol TC08 
+        - odstranit úkol TC09 - TC11 + TC21
+        - načíst předchozí úkoly TC12 - TC14 + TC22
+        - zapsat do souboru TC15 - TC16
+TC17 kontroluje správnost ukončení programu
+
+Příprava prostředí - Pokud existuje soubor seznam_ukolu.json, smažte jej (totéž udělejte před TC14 a TC15)
+        
+_______________________________________________________________________________________________________________________________________
+
+TC01: Výběr platné možnosti z menu - pozitivní test
+
+Popis: Ověření, že volba čísla 1 v hlavním menu správně spustí funkci pridat_ukol
+Vstupní podmínky: Program zobrazuje hlavní menu
+Kroky testu: 1. Spusťte program
+             2. Ověřte, že se zobrazuje hlavní menu s nabídkou voleb (např. "1 - Přidat nový úkol", "2 - Zobrazit všechny úkoly" atd.)
+             3. Zadejte číslo 1 a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program spustí funkci pridat_ukol()
+Skutečný výsledek: Funkce pridat_ukol() byla spuštěna a program zobrazil výzvu k zadání nového úkolu
+Stav: Pass
+Poznámky: Tento případ kontroluje základní funkčnost programu
+_______________________________________________________________________________________________________________________________________
+
+TC02: Výběr platné možnosti z menu - negativní test
+
+Popis: Zadání čísla které není v nabídce (-1, 5)
+Vstupní podmínky: Program zobrazuje hlavní menu
+Kroky testu: 1. Spusťte program
+             2. Ověřte, že se zobrazuje hlavní menu s nabídkou voleb (např. "1 - Přidat nový úkol", "2 - Zobrazit všechny úkoly" atd.)
+             3. Zadejte číslo -1 a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní na neplatný vstup
+Skutečný výsledek: Program vypsal 'Neplatná volba' a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Tento případ odhaluje, zda program kontroluje správnost vstupu
+_______________________________________________________________________________________________________________________________________
+
+TC03: Výběr platné možnosti z menu - negativní test
+
+Popis: Zadání speciálního znaku místo platného vstupu (@, >, /) nebo nevyplněného pole
+Vstupní podmínky: Program zobrazuje hlavní menu
+Kroky testu: 1. Spusťte program
+             2. Ověřte, že se zobrazuje hlavní menu s nabídkou voleb (např. "1 - Přidat nový úkol", "2 - Zobrazit všechny úkoly" atd.)
+             3. Zadejte znak @ a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní na neplatný vstup
+Skutečný výsledek: Program vypsal 'Neplatná volba'a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Tento případ odhaluje, zda program kontroluje správnost vstupu
+_______________________________________________________________________________________________________________________________________
+
+TC04: Přidání nového úkolu - pozitivní test
+
+Popis: Ověření, že program přidá úkol do seznamu
+Vstupní podmínky: Seznam úkolů je prázdný. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 1. Přidat nový úkol a potvrďte stisknutím klávesy Enter
+             2. Zadejte název úkolu - max. 100 znaků: "Nákup" a potvrďte stisknutím klávesy Enter
+             3. Zadejte popis úkolu: "Koupit mléko" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program přidá úkol do seznamu
+Skutečný výsledek: Program vypsal "Úkol 'Nákup' byl přidán." a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Tento případ kontroluje základní funkčnost programu, test zároveň ověřuje i uložení dat
+_______________________________________________________________________________________________________________________________________
+
+TC05:  Přidání nového úkolu - negativní test
+
+Popis: Zadání prázdného pole do "Zadejte název úkolu - max. 100 znaků:" nebo "Zadejte popis úkolu:"
+Vstupní podmínky: Seznam úkolů obsahuje 1 úkol. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 1. Přidat nový úkol a potvrďte stisknutím klávesy Enter
+             2. Zadejte název úkolu- max. 100 znaků:  potvrďte stisknutím klávesy Enter
+             3. Zadejte popis úkolu: "Koupit mléko" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní na prázdné pole
+Skutečný výsledek: Program vypsal "Úkol nebyl zadán, opakujte prosím zadání úkolu." a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Program kontroluje prázdné vstupy
+_______________________________________________________________________________________________________________________________________
+
+TC06: Přidání nového úkolu - negativní test
+
+Popis: Zadání dlouhého vstupu do "Zadejte název úkolu - max. 100 znaků:"
+Vstupní podmínky: Seznam úkolů obsahuje 1 úkol. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 1. Přidat nový úkol a potvrďte stisknutím klávesy Enter
+             2. Zadejte název úkolu- max. 100 znaků: "jjjjjjj...jjjjjjjjjj" (jx150) potvrďte stisknutím klávesy Enter
+             3. Zadejte popis úkolu: "456789" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní na neplatný vstup
+Skutečný výsledek: Program vypsal "Úkol je moc dlouhý (max. 100 znaků)." a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Program nekontroluje obsah vstupu, pouze jeho délku
+_______________________________________________________________________________________________________________________________________
+
+TC07: Přidání nového úkolu - hraniční test
+
+Popis: Zadání 100 znaků do "Zadejte název úkolu - max. 100 znaků:"
+Vstupní podmínky: Seznam úkolů obsahuje 1 úkol. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 1. Přidat nový úkol a potvrďte stisknutím klávesy Enter
+             2. Zadejte název úkolu- max. 100 znaků: "jjjjjjj...jjjjjjjjjj" (jx100) potvrďte stisknutím klávesy Enter
+             3. Zadejte popis úkolu: "456789" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program přidá úkol do seznamu
+Skutečný výsledek: Program vypsal "Úkol 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj' byl přidán." 
+                    a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Program nekontroluje obsah vstupu, pouze jeho délku, test zároveň ověřuje i uložení dat
+_______________________________________________________________________________________________________________________________________
+
+TC08: Zobrazení úkolů - pozitivní test
+
+Popis: Ověření, že volba číslo 2 v hlavním menu spustí funkci zobrazit_ukol
+Vstupní podmínky: Seznam úkolů obsahuje 2 úkoly. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 2. Zobrazit všechny úkoly a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program spustí funkci zobrazit_ukol()
+Skutečný výsledek: Program vypsal seznam úkolů 
+                    "Seznam úkolů:
+                    1. Nákup - Koupit mléko
+                    2. jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj - 456789"
+                    a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Tento případ kontroluje základní funkčnost programu
+_______________________________________________________________________________________________________________________________________
+
+TC09: Odstranění úkolu - pozitivní test
+
+Popis: Odstranění existujícího úkolu ze seznamu
+Vstupní podmínky: Seznam úkolů obsahuje 2 úkoly. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 3. Odstranit úkol a potvrďte stisknutím klávesy Enter
+             2. Zobrazí se seznam dvou úkolů a "Zadejte číslo úkolu, který chcete odstranit: "
+             3. Zadejte "2" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program odstraní zadaný úkol
+Skutečný výsledek: Program vypsal "Úkol '2' byl odstraněn" a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Tento případ kontroluje základní funkčnost programu, test zároveň ověřuje i uložení dat po změně
+_______________________________________________________________________________________________________________________________________
+
+TC10: Odstranění úkolu - negativní test
+
+Popis: Odstranění neexistujícího úkolu ze seznamu
+Vstupní podmínky: Seznam úkolů obsahuje 1 úkol. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 3. Odstranit úkol a potvrďte stisknutím klávesy Enter
+             2. Zobrazí se seznam jednoho úkolu a "Zadejte číslo úkolu, který chcete odstranit: "
+             3. Zadejte "2" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní na neplatnou volbu
+Skutečný výsledek: Program vypsal "Zadané číslo není v seznamu." a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Program kontroluje zadané číslo
+_______________________________________________________________________________________________________________________________________
+
+TC11: Odstranění úkolu - negativní test
+
+Popis: Zadání jiného znaku (l, @, =), než číslo do "Zadejte číslo úkolu, který chcete odstranit:"
+Vstupní podmínky: Seznam úkolů obsahuje 1 úkol. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 3. Odstranit úkol a potvrďte stisknutím klávesy Enter
+             2. Zobrazí se seznam jednoho úkolu a "Zadejte číslo úkolu, který chcete odstranit: "
+             3. Zadejte "l" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní na neplatnou volbu
+Skutečný výsledek: Program vypsal "Neplatné číslo." a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Program kontroluje neplatný vstup
+_______________________________________________________________________________________________________________________________________
+
+TC12: Načtení předchozích úkolů - pozitivní test
+
+Popis: Ověření, že program načte úkoly uložené v json souboru
+Vstupní podmínky: Soubor json obsahuje 1 úkol. Program je vypnutý
+Kroky testu: 1. Spusťte program
+             2. Ověřte, že se zobrazuje hlavní menu s nabídkou voleb (např. "1 - Přidat nový úkol", "2 - Zobrazit všechny úkoly" atd.)
+             3. Vyberte možnost 2 a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program zobrazí seznam úkolů ze souboru json
+Skutečný výsledek: Program vypsal "Seznam úkolů:
+                                    1. Nákup - Koupit mléko" a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Tento případ potvrzuje, že skript dokáže i po jeho ukončení a opětovném spuštění načíst data ze souboru 
+_______________________________________________________________________________________________________________________________________
+
+TC13: Načtení předchozích úkolů - hraniční test
+
+Popis: Načtení neexistujících dat
+Vstupní podmínky: Soubor json neobsahuje žádný úkol. Program je vypnutý
+Kroky testu: 1. Spusťte program
+             2. Ověřte, že se zobrazuje hlavní menu s nabídkou voleb (např. "1 - Přidat nový úkol", "2 - Zobrazit všechny úkoly" atd.)
+             3. Vyberte možnost 2 a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní, že seznam je prázdný
+Skutečný výsledek: Program vypsal "Seznam úkolů:
+                                   Žádné úkoly" a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: 
+_______________________________________________________________________________________________________________________________________
+
+TC14: Načtení předchozích úkolů - negativní test
+
+Popis: Načtení neexistujícího souboru
+Vstupní podmínky: Soubor json neexistuje. Program je vypnutý
+Kroky testu: 1. Spusťte program
+             2. Ověřte, že se zobrazuje hlavní menu s nabídkou voleb (např. "1 - Přidat nový úkol", "2 - Zobrazit všechny úkoly" atd.)
+             3. Vyberte možnost 2 a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní, že seznam je prázdný
+Skutečný výsledek: Program vypsal "Seznam úkolů:
+                                   Žádné úkoly" a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: 
+_______________________________________________________________________________________________________________________________________
+
+TC15: Zapsání do souboru - pozitivní test
+
+Popis: Ověření, že program vytvoří json soubor
+Vstupní podmínky: Soubor json neexistuje. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 1. Přidat nový úkol a potvrďte stisknutím klávesy Enter
+             2. Zadejte název úkolu - max. 100 znaků: "Nákup" a potvrďte stisknutím klávesy Enter
+             3. Zadejte popis úkolu: "Koupit mléko" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Vytvoří se json soubor s jedním úkolem
+Skutečný výsledek: Vytvořil se soubor "seznam_ukolu.json" s úkolem "[{"název": "Nákup", "popis": "Koupit mléko"}]"
+Stav: Pass
+Poznámky: Program ukládá data pro budoucí použití
+_______________________________________________________________________________________________________________________________________
+
+TC16: Zapsání do souboru - negativní test
+
+Popis: Ověření, že po zadání prázdného pole do "Zadejte popis úkolu:" se do souboru nepřidá úkol
+Vstupní podmínky: Soubor json obsahuje 1 úkol. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost  1. Přidat nový úkol a potvrďte stisknutím klávesy Enter
+             2. Zadejte název úkolu - max. 100 znaků: "Nákup" a potvrďte stisknutím klávesy Enter
+             3. Zadejte popis úkolu:  potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Do souboru json se úkol nezapíše
+Skutečný výsledek: Program vypsal "Úkol nebyl zadán, opakujte prosím zadání úkolu." a znovu zobrazil hlavní menu
+                V souboru json je stále 1 úkol
+Stav: Pass
+Poznámky: Úkoly, které neprojdou sítem skriptu, nejsou zapsány do souboru json
+_______________________________________________________________________________________________________________________________________
+
+TC17: Konec programu - pozitivní test
+
+Popis: Ověření, že volba čísla 4 v hlavním menu ukončí program
+Vstupní podmínky: Seznam úkolů obsahuje jeden úkol. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 4 a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program se ukončí
+Skutečný výsledek: Program vypsal "Konec programu." a ukončil se
+Stav: Pass
+Poznámky: Tento případ kontroluje základní funkčnost programu
+_______________________________________________________________________________________________________________________________________
+
+TC18: Přidání nového úkolu - negativní test
+
+Popis: Zadání mezer do "Zadejte název úkolu - max. 100 znaků:"
+Vstupní podmínky: Seznam úkolů obsahuje 1 úkol. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 1. Přidat nový úkol a potvrďte stisknutím klávesy Enter
+             2. Zadejte název úkolu- max. 100 znaků: "  " potvrďte stisknutím klávesy Enter
+             3. Zadejte popis úkolu: "vytisknout seznam" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní na neplatný vstup
+Skutečný výsledek: Program vypsal "Úkol ' ' byl přidán." a znovu zobrazil hlavní menu
+Stav: Fail
+Poznámky: Program nekontroluje obsah vstupu, pouze jeho délku
+_______________________________________________________________________________________________________________________________________
+
+TC19: Přidání nového úkolu - hraniční test
+
+Popis: Ověření, zda program přidá stejný úkol do seznamu
+Vstupní podmínky: Seznam úkolů obsahuje úkol "Nákup". Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 1. Přidat nový úkol a potvrďte stisknutím klávesy Enter
+             2. Zadejte název úkolu - max. 100 znaků: "Nákup" a potvrďte stisknutím klávesy Enter
+             3. Zadejte popis úkolu: "Koupit mléko" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program přidá úkol do seznamu
+Skutečný výsledek: Program vypsal "Úkol 'Nákup' byl přidán." a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Program by mohl upozornit na stejný úkol v seznamu a požádat o potvrzení přidání úkolu do seznamu
+_______________________________________________________________________________________________________________________________________
+TC20: Přidání nového úkolu - hraniční test
+
+Popis: Ověření, zda program přidá úkol tvořený emoji do seznamu
+Vstupní podmínky: Seznam úkolů existuje. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 1. Přidat nový úkol a potvrďte stisknutím klávesy Enter
+             2. Zadejte název úkolu - max. 100 znaků: ":o(" a potvrďte stisknutím klávesy Enter
+             3. Zadejte popis úkolu: "usmát se" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní na nevalidní vstup
+Skutečný výsledek: Program vypsal "Úkol ':o(' byl přidán." a znovu zobrazil hlavní menu
+Stav: Fail
+Poznámky: Program nekontroluje obsah vstupu, pouze jeho délku
+_______________________________________________________________________________________________________________________________________
+TC21: Odstranění úkolu - hraniční test
+
+Popis: Zadání desetimístného čísla do "Zadejte číslo úkolu, který chcete odstranit:"
+Vstupní podmínky: Seznam úkolů obsahuje 1 úkol. Program zobrazuje hlavní menu
+Kroky testu: 1. Vyberte možnost 3. Odstranit úkol a potvrďte stisknutím klávesy Enter
+             2. Zobrazí se seznam jednoho úkolu a "Zadejte číslo úkolu, který chcete odstranit: "
+             3. Zadejte "1234567891" a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní na neplatnou volbu
+Skutečný výsledek: Program vypsal "Zadané číslo není v seznamu." a znovu zobrazil hlavní menu
+Stav: Pass
+Poznámky: Program kontroluje neplatný vstup, ale mohl by upozornit, zda je zadaný vstup moc vysoký nebo moc nízký
+_______________________________________________________________________________________________________________________________________
+TC22: Načtení předchozích úkolů - negativní test
+
+Popis: Načtení poškozeného json souboru
+Vstupní podmínky: Souboru json v jednom ze slovníků chybí klíč "{"název": "skleník", : "zalít skleník u sousedu"}". Program je vypnutý
+Kroky testu: 1. Spusťte program
+             2. Ověřte, že se zobrazuje hlavní menu s nabídkou voleb (např. "1 - Přidat nový úkol", "2 - Zobrazit všechny úkoly" atd.)
+             3. Vyberte možnost 2 a potvrďte stisknutím klávesy Enter
+Očekávaný výsledek: Program upozorní, že seznam je poškozený
+Skutečný výsledek: Program vypsal "Seznam úkolů:
+                                   Žádné úkoly" a znovu zobrazil hlavní menu
+Stav: Fail
+Poznámky: Program není schopen načíst existující poškozený soubor, nevypíše hlášku s validní informací
+_______________________________________________________________________________________________________________________________________
