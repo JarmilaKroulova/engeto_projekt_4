@@ -1,6 +1,6 @@
 Tento repozitář obsahuje soubory
 
-task_manager.py - což je skript pro správu úkolů
+main.py - což je skript pro správu úkolů
 
 testovaci_plan.txt - soubor obsahující testovací případy pro task_manager.py
 
