@@ -68,6 +68,7 @@ def odstranit_ukol(seznam)-> list[dict]:
         seznam.pop(index - 1)
         print(f"Úkol '{ukol}' byl odstraněn")
         return seznam
+    return seznam
 
 
 def nacist_predchozi_ukoly(seznam_json):
